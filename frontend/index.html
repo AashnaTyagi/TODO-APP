@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskflow — To-Do App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-bg">
+      <div class="auth-bg__blob auth-bg__blob--1"></div>
+      <div class="auth-bg__blob auth-bg__blob--2"></div>
+      <div class="auth-bg__blob auth-bg__blob--3"></div>
+    </div>
+    <div class="auth-container">
+      <div class="auth-brand">
+        <div class="auth-brand__icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="8" fill="currentColor"/>
+            <path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="auth-brand__name">Taskflow</span>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab auth-tab--active" id="tab-login">Sign In</button>
+          <button class="auth-tab" id="tab-signup">Sign Up</button>
+        </div>
+        <div class="auth-error" id="auth-error" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+          <span id="auth-error-text"></span>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email address</label>
+            <input class="form-input" type="email" id="login-email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="login-password" placeholder="••••••••" required />
+              <button type="button" class="input-eye" data-target="login-password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="btn btn--primary btn--full" type="submit" id="login-btn">
+            <span class="btn__text">Sign In</span>
+            <span class="btn__spinner" style="display:none"></span>
+          </button>
+        </form>
+        <form id="signup-form" style="display:none">
+          <div class="form-group">
+            <label class="form-label" for="signup-name">Full name</label>
+            <input class="form-input" type="text" id="signup-name" placeholder="Jane Doe" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup-email">Email address</label>
+            <input class="form-input" type="email" id="signup-email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup-password">Password</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="signup-password" placeholder="••••••••" required />
+              <button type="button" class="input-eye" data-target="signup-password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
+            </div>
+            <div class="password-hints">
+              <div class="hint" id="hint-length"><span class="hint__dot"></span>At least 6 characters</div>
+              <div class="hint" id="hint-upper"><span class="hint__dot"></span>One uppercase letter</div>
+              <div class="hint" id="hint-lower"><span class="hint__dot"></span>One lowercase letter</div>
+              <div class="hint" id="hint-number"><span class="hint__dot"></span>One number</div>
+              <div class="hint" id="hint-special"><span class="hint__dot"></span>One special character</div>
+            </div>
+          </div>
+          <button class="btn btn--primary btn--full" type="submit" id="signup-btn">
+            <span class="btn__text">Create Account</span>
+            <span class="btn__spinner" style="display:none"></span>
+          </button>
+        </form>
+      </div>
+      <p class="auth-footer">Secure · Private · Yours</p>
+    </div>
+  </div>
+
+  <!-- APP SCREEN -->
+  <div id="app-screen" class="app-screen" style="display:none">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <div class="sidebar__brand">
+          <div class="sidebar__brand-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="currentColor"/><path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span>Taskflow</span>
+        </div>
+        <button class="sidebar__close" id="sidebar-close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <nav class="sidebar__nav">
+        <button class="nav-item nav-item--active" data-filter="all">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+          All Tasks <span class="nav-item__count" id="count-all">0</span>
+        </button>
+        <button class="nav-item" data-filter="pending">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Pending <span class="nav-item__count" id="count-pending">0</span>
+        </button>
+        <button class="nav-item" data-filter="completed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Completed <span class="nav-item__count" id="count-completed">0</span>
+        </button>
+      </nav>
+      <div class="sidebar__divider"></div>
+      <div class="sidebar__section-label">Priority</div>
+      <nav class="sidebar__nav">
+        <button class="nav-item" data-priority="high"><span class="priority-dot priority-dot--high"></span>High</button>
+        <button class="nav-item" data-priority="medium"><span class="priority-dot priority-dot--medium"></span>Medium</button>
+        <button class="nav-item" data-priority="low"><span class="priority-dot priority-dot--low"></span>Low</button>
+      </nav>
+      <div class="sidebar__spacer"></div>
+      <div class="sidebar__user">
+        <div class="user-avatar" id="sidebar-avatar">U</div>
+        <div class="user-info">
+          <div class="user-info__name" id="sidebar-name">User</div>
+          <div class="user-info__email" id="sidebar-email"></div>
+        </div>
+        <button class="btn-icon" id="logout-btn" title="Logout">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button class="btn-icon" id="sidebar-toggle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <div class="topbar__greeting">
+            <h1 class="topbar__title" id="greeting">Good morning 👋</h1>
+            <span class="topbar__subtitle" id="greeting-name"></span>
+          </div>
+        </div>
+        <div class="topbar__right">
+          <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+            <svg class="theme-icon theme-icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg class="theme-icon theme-icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-card__value" id="stat-total">0</div>
+          <div class="stat-card__label">Total Tasks</div>
+          <div class="stat-card__bar"><div class="stat-card__fill stat-card__fill--total" id="stat-bar-total"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value" id="stat-pending">0</div>
+          <div class="stat-card__label">Pending</div>
+          <div class="stat-card__bar"><div class="stat-card__fill stat-card__fill--pending" id="stat-bar-pending"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value" id="stat-completed">0</div>
+          <div class="stat-card__label">Completed</div>
+          <div class="stat-card__bar"><div class="stat-card__fill stat-card__fill--completed" id="stat-bar-completed"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value" id="stat-progress">0%</div>
+          <div class="stat-card__label">Progress</div>
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44">
+              <circle class="progress-ring__bg" cx="22" cy="22" r="18"/>
+              <circle class="progress-ring__fill" cx="22" cy="22" r="18" id="progress-ring-fill"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <div class="task-toolbar">
+        <div class="search-wrap">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input class="search-input" type="text" id="search-input" placeholder="Search tasks…" autocomplete="off" />
+          <button class="search-clear" id="search-clear" style="display:none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <button class="btn btn--primary btn--add" id="add-task-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Add Task</span>
+        </button>
+      </div>
+
+      <div class="task-list-container">
+        <div class="task-loading" id="task-loading">
+          <div class="skeleton-task"></div>
+          <div class="skeleton-task"></div>
+          <div class="skeleton-task"></div>
+        </div>
+        <div class="task-empty" id="task-empty" style="display:none">
+          <div class="task-empty__icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="task-empty__title" id="empty-title">No tasks yet</p>
+          <p class="task-empty__sub" id="empty-sub">Add your first task to get started</p>
+        </div>
+        <ul class="task-list" id="task-list"></ul>
+      </div>
+    </main>
+  </div>
+
+  <!-- TASK MODAL -->
+  <div class="modal-overlay" id="task-modal-overlay" style="display:none">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title" id="modal-title">New Task</h2>
+        <button class="modal__close" id="modal-close">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <form class="modal__body" id="task-form">
+        <input type="hidden" id="task-id" />
+        <div class="form-group">
+          <label class="form-label" for="task-title">Task title *</label>
+          <input class="form-input" type="text" id="task-title" placeholder="What needs to be done?" maxlength="200" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="task-desc">Description</label>
+          <textarea class="form-input form-textarea" id="task-desc" placeholder="Add details…" maxlength="1000" rows="3"></textarea>
+        </div>
+        <div class="modal__row">
+          <div class="form-group">
+            <label class="form-label" for="task-priority">Priority</label>
+            <select class="form-input form-select" id="task-priority">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-due">Due date</label>
+            <input class="form-input" type="date" id="task-due" />
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--ghost" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn--primary" id="modal-submit">
+            <span class="btn__text">Create Task</span>
+            <span class="btn__spinner" style="display:none"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="delete-modal-overlay" style="display:none">
+    <div class="modal modal--sm">
+      <div class="modal__header">
+        <h2 class="modal__title">Delete Task</h2>
+        <button class="modal__close" id="delete-modal-close">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p class="delete-confirm-text">Are you sure you want to delete <strong id="delete-task-name"></strong>? This cannot be undone.</p>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--ghost" id="delete-cancel">Cancel</button>
+          <button type="button" class="btn btn--danger" id="delete-confirm">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<footer class="app-footer">
+  &copy; 2025 Taskflow &mdash; Designed &amp; Built by <strong>Aashna</strong>. All rights reserved.
+</footer>
+<div class="toast-container" id="toast-container"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "taskflow-todo-app",
+  "version": "1.0.0",
+  "description": "Full-stack To-Do application with Node.js, Express, MongoDB & JWT auth",
+  "scripts": {
+    "install": "cd backend && npm install",
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev"
+  },
+  "keywords": ["todo", "express", "mongodb", "jwt", "portfolio"],
+  "author": "",
+  "license": "MIT"
+}
